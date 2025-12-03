@@ -1,5 +1,5 @@
-const express = require('express');
 const path = require('path');
+const express = require('express');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 try {
     require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
@@ -42,10 +42,6 @@ app.post('/api/chat', async (req, res) => {
         console.error("Gemini Error:", error);
         res.status(500).json({ error: "Maaf, AI sedang sibuk." });
     }
-});
-
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 module.exports = app;
