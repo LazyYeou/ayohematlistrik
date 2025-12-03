@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AyoHematListrik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+      body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      .mask-image-b { mask-image: linear-gradient(to bottom, transparent, black); -webkit-mask-image: linear-gradient(to bottom, transparent, black); }
+      
+      /* Chatbot Animations */
+      .typing-dot { animation: typing 1.4s infinite ease-in-out both; }
+      .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+      .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+      @keyframes typing { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+    </style>
+    
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              ecology: {
+                900: '#064e3b', 800: '#065f46', 700: '#047857', 600: '#059669',
+                100: '#d1fae5', 50: '#ecfdf5',
+                lime: '#d9f99d', accent: '#bef264',
+              }
+            },
+            borderRadius: { 'leaf': '0px 50px 0px 50px', 'leaf-inverse': '50px 0px 50px 0px' }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased selection:bg-ecology-lime selection:text-ecology-900">
+
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all bg-green-50 py-5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="bg-ecology-900 p-1.5 rounded-lg text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-leaf"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 13-1.8 19-4.7 2.6-11.1 2.7-13.5-1"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                </div>
+                <span class="text-2xl font-bold tracking-tight text-ecology-900">AyoHemat <span class="text-ecology-600 font-light">Listrik</span></span>
+            </div>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#" class="text-sm font-medium text-slate-700 hover:text-ecology-900 transition-colors">Home</a>
+                <a href="#impact" class="text-sm font-medium text-slate-700 hover:text-ecology-900 transition-colors">Dampak</a>
+                <a href="#tips" class="text-sm font-medium text-slate-700 hover:text-ecology-900 transition-colors">Tips</a>
+                <a href="#calculator" class="text-sm font-medium text-slate-700 hover:text-ecology-900 transition-colors">Kalkulator</a>
+                <a href="#chatbot" class="text-sm font-medium text-slate-700 hover:text-ecology-900 transition-colors">Chatbot</a>
+            </div>
+            <button id="mobile-menu-btn" class="md:hidden text-ecology-900">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 right-0 bg-white border-b border-slate-100 shadow-lg p-4 flex-col gap-4">
+            <a href="#" class="text-base font-medium text-slate-800 py-2 border-b border-slate-50">Home</a>
+            <a href="#impact" class="text-base font-medium text-slate-800 py-2 border-b border-slate-50">Dampak</a>
+            <a href="#tips" class="text-base font-medium text-slate-800 py-2 border-b border-slate-50">Tips</a>
+            <a href="#calculator" class="text-base font-medium text-slate-800 py-2 border-b border-slate-50">Kalkulator</a>
+            <a href="#chatbot" class="text-base font-medium text-slate-800 py-2 border-b border-slate-50">Chatbot</a>
+        </div>
+    </nav>
+
+    <main>
+        <section class="relative w-full min-h-[90vh] pt-24 pb-32 overflow-hidden bg-slate-50 flex items-center">
+            <div class="absolute top-0 right-0 w-full h-full z-0">
+               <img src="img/forest-bgm.jpg" class="w-full h-full object-cover object-center" alt="Nature" />
+               <div class="absolute inset-0 bg-gradient-to-r from-white via-white/60 to-transparent"></div>
+            </div>
+            <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+              <div class="max-w-2xl">
+                <h1 class="text-5xl md:text-7xl font-extrabold text-ecology-900 leading-[1.1] tracking-tight">
+                  Bijak Energi,<br/><span class="text-ecology-700">Bumi Lestari</span>
+                </h1>
+                <p class="text-lg text-slate-700 mb-8 max-w-lg font-medium leading-relaxed">
+                  Setiap watt sangat berpengaruh terhadap masa depan bumi. Jelajahi laman kami untuk memahami dampak kebiasaan konsumsi energi.
+                </p>
+              </div>
+            </div>
+        </section>
+
+        <section id="about" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-3xl">
+                <h2 class="text-3xl font-bold text-ecology-900 mb-6">Tujuan Kami</h2>
+                <p class="text-slate-600">Web ini hadir untuk menjembatani kesenjangan antara pengetahuan dan tindakan. Kami berdedikasi menyediakan edukasi praktis mengenai efisiensi listrik guna mendukung Tujuan Pembangunan Berkelanjutan (SDG), mengurangi emisi karbon, dan menciptakan masa depan energi yang lebih adil bagi semua."  </p>
+            </div>
+        </section>
+
+        <section id="sdg-impact" class="py-24 bg-ecology-50 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-white to-transparent opacity-50"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-3xl md:text-5xl font-bold text-ecology-900 mt-6">
+                        Menghubungkan Efisiensi Energi dengan <br class="hidden md:block">Tujuan Global
+                    </h2>
+                    <p class="text-slate-600 text-lg my-3">
+                        Upaya sederhana kita dalam menghemat listrik bukan hanya tentang tagihan, tetapi kontribusi nyata terhadap agenda keberlanjutan dunia.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                    <div class="group bg-white rounded-[2.5rem] shadow-xl shadow-ecology-900/5 overflow-hidden border border-ecology-100 flex flex-col lg:flex-row hover:-translate-y-2 transition-all duration-300">
+                        <div class="lg:w-2/5 bg-[#BF8B2E] p-10 flex items-center justify-center relative overflow-hidden">
+                            <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')]"></div>
+                            <img src="https://www.un.org/sustainabledevelopment/wp-content/uploads/2019/08/E-Inverted-Icons_WEB-12-1024x1024.png" alt="SDG 12 Icon" class="w-40 h-40 object-contain drop-shadow-2xl relative z-10 group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <div class="p-8 lg:p-10 lg:w-3/5 flex flex-col justify-center">
+                            <h3 class="text-2xl font-bold text-[#BF8B2E] mb-2">SDG 12</h3>
+                            <h4 class="text-xl font-bold text-ecology-900 mb-4">Konsumsi dan Produksi yang Bertanggung Jawab</h4>
+                            <p class="text-slate-600 leading-relaxed mb-6">
+                                Efisiensi energi adalah inti dari konsumsi yang bertanggung jawab. Dengan menggunakan listrik secara bijak, kita mengurangi permintaan terhadap pembangkit listrik yang boros sumber daya alam, meminimalkan limbah energi, dan mendukung prinsip ekonomi sirkular.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="group bg-white rounded-[2.5rem] shadow-xl shadow-ecology-900/5 overflow-hidden border border-ecology-100 flex flex-col lg:flex-row hover:-translate-y-2 transition-all duration-300">
+                        <div class="lg:w-2/5 bg-[#3F7E44] p-10 flex items-center justify-center relative overflow-hidden">
+                            <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')]"></div>
+                            <img src="https://www.un.org/sustainabledevelopment/wp-content/uploads/2019/08/E-Inverted-Icons_WEB-13-1024x1024.png" alt="SDG 13 Icon" class="w-40 h-40 object-contain drop-shadow-2xl relative z-10 group-hover:scale-110 transition-transform duration-500">
+                        </div>
+                        <div class="p-8 lg:p-10 lg:w-3/5 flex flex-col justify-center">
+                            <h3 class="text-2xl font-bold text-[#3F7E44] mb-2">SDG 13</h3>
+                            <h4 class="text-xl font-bold text-ecology-900 mb-4">Penanganan Perubahan Iklim</h4>
+                            <p class="text-slate-600 leading-relaxed mb-6">
+                                Sebagian besar listrik dunia masih dihasilkan dari bahan bakar fosil penyumbang emisi CO2. Menghemat listrik secara langsung menurunkan permintaan energi, mengurangi emisi gas rumah kaca dari pembangkit listrik, dan menjadi langkah termudah pencegahan perubahan iklim.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="impact" class="py-20 bg-ecology-900 text-white relative overflow-hidden">
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-5xl font-bold mt-2">Dampak Pada Dunia</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 hover:bg-white/20 transition group">
+                        <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">🌡️</div>
+                        <h4 class="font-bold text-lg mb-2 text-ecology-lime"> Pemanasan Global</h4>
+                        <p class="text-sm text-ecology-100">Pembangkit listrik biasa menyumbang sekitar 25% pemanasan global. Penggunaan listrik berlebihan menghasilkan emisi CO2 yang banyak sehingga memperburuk efek rumah kaca dan menyebabkan suhu bumi naik. </p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 hover:bg-white/20 transition group">
+                        <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">☁️</div>
+                        <h4 class="font-bold text-lg mb-2 text-ecology-lime">Hujam Asam</h4>
+                        <p class="text-sm text-ecology-100">Pemborosan listrik bisa menyebabkan hujan asam yang berbahaya bagi lingkungan dan kesehatan manusia. </p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 hover:bg-white/20 transition group">
+                        <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">⚡</div>
+                        <h4 class="font-bold text-lg mb-2 text-ecology-lime">Pemborosan Sumber Daya Energi</h4>
+                        <p class="text-sm text-ecology-100">Penggunaan energi listrik yang berlebihan bisa menyebabkan pemborosan sumber daya energi, terutama bahan bakar fosil yang bisa habis perlahan. </p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 hover:bg-white/20 transition group">
+                        <div class="text-4xl mb-4 group-hover:scale-110 transition-transform">🌍</div>
+                        <h4 class="font-bold text-lg mb-2 text-ecology-lime">Perubahan Iklim</h4>
+                        <p class="text-sm text-ecology-100">Pemborosan energi listrik mempercepat perubahan iklim seperti menyebabkan pemanasan global, cuaca ekstrem, dan naiknya permukaan air laut.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tips" class="py-24 bg-gradient-to-br from-emerald-50 via-white to-teal-50 relative overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center mb-20">
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-slate-800 mb-4">
+                        Langkah Kecil, <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Dampak Besar</span>
+                    </h2>
+                    <p class="text-slate-500 max-w-2xl mx-auto text-lg">
+                        Yuk kita mulai dari langkah kecil
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-center items-center">
+                    <div class="group justify-start rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-100 hover:-translate-y-2 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-emerald-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                        <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mb-6 text-3xl group-hover:rotate-12 transition-transform duration-300">💡</div>
+                        <h4 class="font-bold text-xl mb-3 text-slate-800 group-hover:text-emerald-600 transition-colors">Beralih ke LED</h4>
+                        <p class="text-slate-500 leading-relaxed text-sm">Ganti lampu pijar dengan lampu LED. Hemat energi dan tahan jauh lebih lama.</p>
+                    </div>
+                    <div class="group justify-center bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-100 hover:-translate-y-2 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-emerald-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                        <div class="w-14 h-14 bg-teal-100 rounded-2xl flex items-center justify-center mb-6 text-3xl group-hover:rotate-12 transition-transform duration-300">🔌</div>
+                        <h4 class="font-bold text-xl mb-3 text-slate-800 group-hover:text-emerald-600 transition-colors">Cabut Alat Yang Tidak Digunakan</h4>
+                        <p class="text-slate-500 leading-relaxed text-sm">Cabut charger dan alat elektronik yang tidak dipakai. Saat tidak digunakan alat elektronik tetap menyedot listrik tanpa kita sadari.</p>
+                    </div>
+                    <div class="group bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-100 hover:-translate-y-2 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                        <div class="w-14 h-14 bg-cyan-100 rounded-2xl flex items-center justify-center mb-6 text-3xl group-hover:rotate-12 transition-transform duration-300">❄️</div>
+                        <h4 class="font-bold text-xl mb-3 text-slate-800 group-hover:text-cyan-600 transition-colors">Atur Suhu AC Bijak</h4>
+                        <p class="text-slate-500 leading-relaxed text-sm">Setel suhu AC/Kipas pada kisaran nyaman dan hindari penggunaan berlebihan.</p>
+                    </div>
+                    <div class="group justify-end bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-100 hover:-translate-y-2 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-emerald-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                        <div class="w-14 h-14 bg-lime-100 rounded-2xl flex items-center justify-center mb-6 text-3xl group-hover:rotate-12 transition-transform duration-300">☀️</div>
+                        <h4 class="font-bold text-xl mb-3 text-slate-800 group-hover:text-emerald-600 transition-colors">Gunakan Cahaya Alami</h4>
+                        <p class="text-slate-500 leading-relaxed text-sm">Gunakan sinar matahari, buka jendela dan gorden di siang hari untuk mengurangi penggunaan lampu.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="calculator" class="py-16 bg-slate-50">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-900">Kalkulator Carbon Footprint </h2>
+                    <p class="text-slate-600">Hitung perkiraan konsumsi listrik dan emisi karbon harian Anda</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    <div class="bg-white p-6 rounded-2xl shadow-lg border border-emerald-100">
+                        <h3 class="font-bold text-emerald-700 mb-4 flex items-center gap-2">Input Penggunaan Harian</h3>
+                        <div class="space-y-4" id="calc-form">
+                            <div class="grid grid-cols-12 gap-2 text-xs font-semibold text-slate-500 mb-1">
+                                <div class="col-span-5">Alat</div>
+                                <div class="col-span-3">Daya (Watt)</div>
+                                <div class="col-span-4">Jam/Hari</div>
+                            </div>
+                            
+                            <div class="grid grid-cols-12 gap-2 items-center">
+                                <div class="col-span-5 text-sm font-medium text-slate-700">Laptop</div>
+                                <div class="col-span-3"><input type="number" id="watt-laptop" value="65" class="w-full border-slate-200 rounded p-1 text-sm bg-slate-50"></div>
+                                <div class="col-span-4"><input type="number" id="hour-laptop" value="6" class="w-full border-slate-200 rounded p-1 text-sm"></div>
+                            </div>
+                            <div class="grid grid-cols-12 gap-2 items-center">
+                                <div class="col-span-5 text-sm font-medium text-slate-700">Lampu Kamar (LED)</div>
+                                <div class="col-span-3"><input type="number" id="watt-lampu" value="10" class="w-full border-slate-200 rounded p-1 text-sm bg-slate-50"></div>
+                                <div class="col-span-4"><input type="number" id="hour-lampu" value="8" class="w-full border-slate-200 rounded p-1 text-sm"></div>
+                            </div>
+                            <div class="grid grid-cols-12 gap-2 items-center">
+                                <div class="col-span-5 text-sm font-medium text-slate-700">Charger HP</div>
+                                <div class="col-span-3"><input type="number" id="watt-hp" value="20" class="w-full border-slate-200 rounded p-1 text-sm bg-slate-50"></div>
+                                <div class="col-span-4"><input type="number" id="hour-hp" value="3" class="w-full border-slate-200 rounded p-1 text-sm"></div>
+                            </div>
+                            <div class="grid grid-cols-12 gap-2 items-center">
+                                <div class="col-span-5 text-sm font-medium text-slate-700">Rice Cooker</div>
+                                <div class="col-span-3"><input type="number" id="watt-rc" value="350" class="w-full border-slate-200 rounded p-1 text-sm bg-slate-50"></div>
+                                <div class="col-span-4"><input type="number" id="hour-rc" value="0.5" class="w-full border-slate-200 rounded p-1 text-sm"></div>
+                            </div>
+                            <div class="grid grid-cols-12 gap-2 items-center">
+                                <div class="col-span-5 text-sm font-medium text-slate-700">Kipas Angin</div>
+                                <div class="col-span-3"><input type="number" id="watt-fan" value="40" class="w-full border-slate-200 rounded p-1 text-sm bg-slate-50"></div>
+                                <div class="col-span-4"><input type="number" id="hour-fan" value="0" class="w-full border-slate-200 rounded p-1 text-sm"></div>
+                            </div>
+
+                            <button id="calc-btn" class="w-full bg-emerald-600 text-white py-2 rounded-lg font-bold hover:bg-emerald-700 transition mt-4 shadow-md">Hitung</button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                                <p class="text-2xl font-bold text-ecology-800"><span id="res-kwh">0</span> <span class="text-sm font-normal text-slate-500">kWh</span></p>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                                <p class="text-2xl font-bold text-ecology-600"><span class="text-sm text-slate-400">Rp</span> <span id="res-cost">0</span></p>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
+                            <div class="relative z-10">
+                                <p class="text-slate-300 text-sm mb-1">Jejak Karbon Bulanan Anda:</p>
+                                <p class="text-4xl font-bold text-emerald-400 mb-4"><span id="res-carbon">0</span> <span class="text-lg text-emerald-200">kg CO2e</span></p>
+                                <div class="h-px bg-slate-600 my-4"></div>
+                                <p class="font-bold text-white mb-3">Setara dengan emisi yang dihasilkan oleh:</p>
+                                <div class="space-y-3">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-xl">🚗</div>
+                                        <div>
+                                            <p class="text-sm text-slate-300">Berkendara Mobil sejauh</p>
+                                            <p class="font-bold text-emerald-300"><span id="comp-km">0</span> km</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-xl">🌳</div>
+                                        <div>
+                                            <p class="text-sm text-slate-300">Butuh Pohon untuk menyerap</p>
+                                            <p class="font-bold text-emerald-300"><span id="comp-tree">0</span> pohon dewasa/tahun</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-emerald-500/20 rounded-full blur-3xl"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="chatbot" class="py-20 bg-white border-y border-ecology-100">
+            <div class="max-w-4xl mx-auto px-4">
+                <div class="text-center mb-10">
+                    <span class="inline-block p-3 rounded-full bg-ecology-50 text-3xl mb-4">🤖</span>
+                    <h2 class="text-3xl font-bold text-ecology-900">Tanya ChatBot</h2>
+                </div>
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl shadow-lg overflow-hidden flex flex-col h-[500px]">
+                    <div id="chat-messages" class="flex-1 p-6 overflow-y-auto space-y-4">
+                        <div class="flex items-start gap-3 justify-start">
+                            <div class="w-8 h-8 rounded-full bg-ecology-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">AI</div>
+                            <div class="bg-white border border-slate-200 text-slate-700 rounded-r-xl rounded-tl-xl px-4 py-3 text-sm max-w-[80%] shadow-sm">
+                                Halo, ada yang bisa saya bantu seputar efisiensi energi?
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white border-t border-slate-200 p-4">
+                        <form id="chat-form" class="flex gap-2">
+                            <input type="text" id="chat-input" class="flex-1 border border-slate-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ecology-500" placeholder="e.g., Apa sajak dampak pemborosan listrik?" />
+                            <button type="submit" class="bg-ecology-600 hover:bg-ecology-700 text-white rounded-full px-6 py-2 text-sm font-bold transition flex items-center gap-2">Send</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-ecology-50 border-t border-ecology-100 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="bg-ecology-900 p-1.5 rounded-lg text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-leaf"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 13-1.8 19-4.7 2.6-11.1 2.7-13.5-1"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                        </div>
+                        <span class="text-2xl font-bold text-ecology-900">AyoHematListrik</span>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-bold text-ecology-900 mb-4">Jelajahi</h4>
+                    <ul class="space-y-2 text-sm text-slate-600">
+                        <li><a href="#" class="hover:text-ecology-700">Tentang Kami</a></li>
+                        <li><a href="#calculator" class="hover:text-ecology-700">Kalkulator</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
